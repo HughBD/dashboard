@@ -3,179 +3,249 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>William's Dashboard</title>
+  <title>William / Command Center</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #0d0d0d;
-      color: #e8e8e8;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
-      padding: 24px 16px;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080808;
+      --surface: #111;
+      --border: #1e1e1e;
+      --text: #e4e4e4;
+      --muted: #555;
+      --accent: #c8a96e;
+      --green: #3ecf8e;
+      --red: #f06464;
+      --white: #fff;
     }
-    header {
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 28px;
-      border-bottom: 1px solid #222;
-      padding-bottom: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
-    header h1 { font-size: 1.4rem; font-weight: 600; color: #fff; }
-    header .meta { font-size: 0.8rem; color: #666; }
-    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; margin-right: 6px; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .avatar-wrap { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent); flex-shrink: 0; }
+    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .header-title { font-size: 1rem; font-weight: 700; color: var(--white); letter-spacing: 0.01em; }
+    .header-sub { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+    .live-badge { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--green); }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* LAYOUT */
+    .page { padding: 16px; max-width: 900px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    .grid-full { grid-column: 1 / -1; }
+
+    /* CARD */
     .card {
-      background: #161616;
-      border: 1px solid #222;
-      border-radius: 12px;
-      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
     }
-    .card h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #666; margin-bottom: 16px; }
-    .card.full { grid-column: 1 / -1; }
+    .card-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
 
-    /* Crypto */
-    .crypto-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e1e1e; }
-    .crypto-item:last-child { border-bottom: none; }
-    .crypto-name { font-weight: 600; font-size: 0.95rem; }
-    .crypto-sub { font-size: 0.75rem; color: #666; margin-top: 2px; }
-    .crypto-val { text-align: right; }
-    .crypto-usd { font-weight: 600; }
-    .pos { color: #22c55e; } .neg { color: #ef4444; }
+    /* STAT ROW */
+    .stat-row { display: flex; gap: 10px; }
+    .stat { background: #181818; border-radius: 8px; padding: 14px 16px; flex: 1; border: 1px solid var(--border); }
+    .stat-val { font-size: 1.6rem; font-weight: 700; color: var(--white); }
+    .stat-lbl { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+    .gold { color: var(--accent); }
 
-    /* Stat boxes */
-    .stat-row { display: flex; gap: 12px; flex-wrap: wrap; }
-    .stat { background: #1a1a1a; border-radius: 8px; padding: 14px 18px; flex: 1; min-width: 100px; }
-    .stat .val { font-size: 1.5rem; font-weight: 700; }
-    .stat .lbl { font-size: 0.72rem; color: #666; margin-top: 4px; }
+    /* WILLIAM STATUS */
+    .w-status { display: flex; align-items: center; gap: 14px; }
+    .w-avatar { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent); flex-shrink: 0; }
+    .w-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .w-name { font-size: 1rem; font-weight: 700; color: var(--white); }
+    .w-detail { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
 
-    /* Email */
-    .email-item { padding: 10px 0; border-bottom: 1px solid #1e1e1e; }
-    .email-item:last-child { border-bottom: none; }
-    .email-from { font-size: 0.82rem; color: #888; }
-    .email-subject { font-size: 0.92rem; font-weight: 500; margin: 2px 0; }
-    .email-date { font-size: 0.75rem; color: #555; }
+    /* CRYPTO */
+    .crypto-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--border); }
+    .crypto-row:last-child { border-bottom: none; }
+    .crypto-sym { font-weight: 700; font-size: 0.95rem; color: var(--white); }
+    .crypto-amt { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .crypto-usd { font-weight: 700; font-size: 0.95rem; text-align: right; }
+    .crypto-chg { font-size: 0.75rem; text-align: right; margin-top: 2px; }
 
-    /* News */
-    .news-item { padding: 10px 0; border-bottom: 1px solid #1e1e1e; }
-    .news-item:last-child { border-bottom: none; }
-    .news-item a { color: #a78bfa; text-decoration: none; font-size: 0.9rem; line-height: 1.4; }
-    .news-item a:hover { text-decoration: underline; }
-    .news-src { font-size: 0.72rem; color: #555; margin-top: 3px; }
+    /* EMAIL */
+    .email-row { padding: 11px 0; border-bottom: 1px solid var(--border); }
+    .email-row:last-child { border-bottom: none; }
+    .email-from { font-size: 0.72rem; color: var(--muted); }
+    .email-subject { font-size: 0.88rem; font-weight: 500; color: var(--text); margin: 2px 0; }
+    .email-date { font-size: 0.7rem; color: var(--border); }
 
-    /* William status */
-    .wstatus { display: flex; align-items: center; gap: 10px; }
-    .wstatus .name { font-size: 1.1rem; font-weight: 600; }
-    .wstatus .detail { font-size: 0.82rem; color: #888; margin-top: 2px; }
-    .avatar { font-size: 2.2rem; }
+    /* NEWS */
+    .news-row { padding: 11px 0; border-bottom: 1px solid var(--border); }
+    .news-row:last-child { border-bottom: none; }
+    .news-row a { color: var(--text); text-decoration: none; font-size: 0.88rem; line-height: 1.45; display: block; }
+    .news-row a:hover { color: var(--accent); }
+    .news-src { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
 
-    footer { text-align: center; font-size: 0.72rem; color: #444; margin-top: 32px; }
+    /* DIVIDER */
+    .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+    /* FOOTER */
+    footer { text-align: center; font-size: 0.68rem; color: #333; padding: 24px 0 16px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>ðŸŽ© William's Dashboard</h1>
-    <div class="meta"><span class="status-dot"></span><span id="updated">Loading...</span></div>
-  </header>
 
+<header class="header">
+  <div class="header-left">
+    <div class="avatar-wrap">
+      <img src="william-avatar.jpg" alt="William" onerror="this.style.display='none'" />
+    </div>
+    <div>
+      <div class="header-title">William / Command Center</div>
+      <div class="header-sub" id="last-updated">Loading...</div>
+    </div>
+  </div>
+  <div class="live-badge">
+    <div class="live-dot"></div>
+    <span>LIVE</span>
+  </div>
+</header>
+
+<div class="page">
   <div class="grid">
+
     <!-- William Status -->
     <div class="card">
-      <h2>ðŸ¤– William Status</h2>
-      <div class="wstatus">
-        <div class="avatar">ðŸŽ©</div>
+      <div class="card-label">Agent Status</div>
+      <div class="w-status">
+        <div class="w-avatar">
+          <img src="william-avatar.jpg" alt="William" onerror="this.style.display='none'" />
+        </div>
         <div>
-          <div class="name" id="w-status">Online</div>
-          <div class="detail" id="w-detail">Loading...</div>
+          <div class="w-name" id="w-name">William</div>
+          <div class="w-detail" id="w-detail">Loading...</div>
         </div>
       </div>
     </div>
 
-    <!-- Portfolio Summary -->
+    <!-- Portfolio -->
     <div class="card">
-      <h2>ðŸ“Š Portfolio</h2>
+      <div class="card-label">Portfolio</div>
       <div class="stat-row">
-        <div class="stat"><div class="val" id="port-total">â€”</div><div class="lbl">Total (USD)</div></div>
-        <div class="stat"><div class="val" id="port-change" >â€”</div><div class="lbl">24h Change</div></div>
+        <div class="stat">
+          <div class="stat-val gold" id="port-total">--</div>
+          <div class="stat-lbl">Total USD</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="port-change">--</div>
+          <div class="stat-lbl">24h Change</div>
+        </div>
       </div>
     </div>
 
-    <!-- Crypto -->
-    <div class="card full">
-      <h2>ðŸ’° Crypto Holdings</h2>
-      <div id="crypto-list"><div style="color:#555;font-size:.85rem">Loading...</div></div>
+    <!-- Crypto Holdings -->
+    <div class="card grid-full">
+      <div class="card-label">Crypto Holdings</div>
+      <div id="crypto-list"></div>
     </div>
 
-    <!-- Email -->
+    <!-- Recent Emails -->
     <div class="card">
-      <h2>ðŸ“¬ Recent Emails</h2>
-      <div id="email-list"><div style="color:#555;font-size:.85rem">Loading...</div></div>
+      <div class="card-label">Recent Emails</div>
+      <div id="email-list"></div>
     </div>
 
-    <!-- News -->
+    <!-- Headlines -->
     <div class="card">
-      <h2>ðŸ“° Headlines</h2>
-      <div id="news-list"><div style="color:#555;font-size:.85rem">Loading...</div></div>
+      <div class="card-label">Headlines</div>
+      <div id="news-list"></div>
     </div>
+
   </div>
+</div>
 
-  <footer>Auto-updated by William Â· <span id="footer-time"></span></footer>
+<footer>William &mdash; Command Center &mdash; <span id="footer-ts"></span></footer>
 
-  <script>
-    async function load() {
-      try {
-        const r = await fetch('data.json?t=' + Date.now());
-        const d = await r.json();
+<script>
+  async function load() {
+    try {
+      const r = await fetch('data.json?t=' + Date.now());
+      const d = await r.json();
 
-        document.getElementById('updated').textContent = 'Updated ' + new Date(d.updated).toLocaleString();
-        document.getElementById('footer-time').textContent = new Date(d.updated).toLocaleString();
+      const ts = new Date(d.updated).toLocaleString('en-CA', { dateStyle: 'medium', timeStyle: 'short' });
+      document.getElementById('last-updated').textContent = 'Updated ' + ts;
+      document.getElementById('footer-ts').textContent = ts;
 
-        // William status
-        document.getElementById('w-status').textContent = d.william?.status || 'Online';
-        document.getElementById('w-detail').textContent = d.william?.detail || '';
+      // William
+      document.getElementById('w-name').textContent = d.william?.status || 'Online';
+      document.getElementById('w-detail').textContent = d.william?.detail || '';
 
-        // Portfolio
-        document.getElementById('port-total').textContent = '$' + (d.portfolio?.total || 'â€”');
-        const chg = d.portfolio?.change24h;
-        const chgEl = document.getElementById('port-change');
-        chgEl.textContent = chg ? (chg > 0 ? '+' : '') + chg + '%' : 'â€”';
-        chgEl.className = 'val ' + (chg >= 0 ? 'pos' : 'neg');
+      // Portfolio
+      const total = document.getElementById('port-total');
+      total.textContent = '$' + (d.portfolio?.total || '--');
 
-        // Crypto
-        const cl = document.getElementById('crypto-list');
-        cl.innerHTML = (d.crypto || []).map(c => `
-          <div class="crypto-item">
-            <div><div class="crypto-name">${c.symbol}</div><div class="crypto-sub">${c.amount} tokens</div></div>
-            <div class="crypto-val">
-              <div class="crypto-usd">$${c.usd}</div>
-              <div class="${c.change >= 0 ? 'pos' : 'neg'}" style="font-size:.78rem">${c.change >= 0 ? '+' : ''}${c.change}%</div>
-            </div>
-          </div>`).join('');
+      const chg = d.portfolio?.change24h;
+      const chgEl = document.getElementById('port-change');
+      chgEl.textContent = chg != null ? (chg >= 0 ? '+' : '') + chg + '%' : '--';
+      chgEl.className = 'stat-val ' + (chg >= 0 ? 'green' : 'red');
 
-        // Email
-        const el = document.getElementById('email-list');
-        el.innerHTML = (d.emails || []).map(e => `
-          <div class="email-item">
-            <div class="email-from">${e.from}</div>
-            <div class="email-subject">${e.subject}</div>
-            <div class="email-date">${e.date}</div>
-          </div>`).join('');
+      // Crypto
+      document.getElementById('crypto-list').innerHTML = (d.crypto || []).map(c => `
+        <div class="crypto-row">
+          <div>
+            <div class="crypto-sym">${c.symbol}</div>
+            <div class="crypto-amt">${c.amount} tokens</div>
+          </div>
+          <div>
+            <div class="crypto-usd ${c.change >= 0 ? 'green' : 'red'}">$${c.usd}</div>
+            <div class="crypto-chg ${c.change >= 0 ? 'green' : 'red'}">${c.change >= 0 ? '+' : ''}${c.change}%</div>
+          </div>
+        </div>`).join('');
 
-        // News
-        const nl = document.getElementById('news-list');
-        nl.innerHTML = (d.news || []).map(n => `
-          <div class="news-item">
-            <a href="${n.url}" target="_blank">${n.title}</a>
-            <div class="news-src">${n.source}</div>
-          </div>`).join('');
+      // Email
+      document.getElementById('email-list').innerHTML = (d.emails || []).map(e => `
+        <div class="email-row">
+          <div class="email-from">${e.from}</div>
+          <div class="email-subject">${e.subject}</div>
+          <div class="email-date">${e.date}</div>
+        </div>`).join('');
 
-      } catch(e) {
-        console.error(e);
-      }
+      // News
+      document.getElementById('news-list').innerHTML = (d.news || []).map(n => `
+        <div class="news-row">
+          <a href="${n.url}" target="_blank" rel="noopener">${n.title}</a>
+          <div class="news-src">${n.source}</div>
+        </div>`).join('');
+
+    } catch(e) {
+      console.error('Dashboard load error:', e);
     }
-    load();
-    setInterval(load, 60000);
-  </script>
+  }
+
+  load();
+  setInterval(load, 60000);
+</script>
 </body>
 </html>
