@@ -1,8 +1,8 @@
 {
-  "updated": "2026-04-02T18:39:00Z",
+  "updated": "2026-04-02T23:39:00Z",
   "william": {
     "status": "Online",
-    "detail": "Active â€” monitoring email, crypto & news"
+    "detail": "Active — monitoring email, crypto and news"
   },
   "portfolio": {
     "total": "703",
@@ -16,10 +16,19 @@
   ],
   "emails": [
     { "from": "Alex @ Work", "subject": "Re: Test", "date": "Today 2:25 PM" },
-    { "from": "Alex @ Work", "subject": "Test", "date": "Today 1:31 PM" },
-    { "from": "Pictory", "subject": "Alex, got an IDEA? ðŸ’¡", "date": "Today 1:58 AM" }
+    { "from": "Alex @ Work", "subject": "Income ideas?", "date": "Today 1:39 PM" },
+    { "from": "Pictory", "subject": "Alex, got an IDEA?", "date": "Today 1:58 AM" }
   ],
   "news": [
-    { "title": "Loading latest headlines...", "source": "William", "url": "#" }
+    {
+      "title": "Crypto market structure bill release pushed back as stablecoin yield compromise reviewed",
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/04/02/crypto-market-structure-bill-release-pushed-back-as-industries-view-revised-stablecoin-yield-compromise-this-week"
+    },
+    {
+      "title": "Bitcoin drops below $68,000 — analysts warn of risk of crash under $60,000",
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/04/02/here-s-why-bitcoin-s-drop-below-usd68-000-puts-it-at-risk-of-a-crash-under-usd60-000"
+    }
   ]
 }
