@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>William's Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0d0d0d;
+      color: #e8e8e8;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      border-bottom: 1px solid #222;
+      padding-bottom: 16px;
+    }
+    header h1 { font-size: 1.4rem; font-weight: 600; color: #fff; }
+    header .meta { font-size: 0.8rem; color: #666; }
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; margin-right: 6px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .card {
+      background: #161616;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #666; margin-bottom: 16px; }
+    .card.full { grid-column: 1 / -1; }
+
+    /* Crypto */
+    .crypto-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e1e1e; }
+    .crypto-item:last-child { border-bottom: none; }
+    .crypto-name { font-weight: 600; font-size: 0.95rem; }
+    .crypto-sub { font-size: 0.75rem; color: #666; margin-top: 2px; }
+    .crypto-val { text-align: right; }
+    .crypto-usd { font-weight: 600; }
+    .pos { color: #22c55e; } .neg { color: #ef4444; }
+
+    /* Stat boxes */
+    .stat-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .stat { background: #1a1a1a; border-radius: 8px; padding: 14px 18px; flex: 1; min-width: 100px; }
+    .stat .val { font-size: 1.5rem; font-weight: 700; }
+    .stat .lbl { font-size: 0.72rem; color: #666; margin-top: 4px; }
+
+    /* Email */
+    .email-item { padding: 10px 0; border-bottom: 1px solid #1e1e1e; }
+    .email-item:last-child { border-bottom: none; }
+    .email-from { font-size: 0.82rem; color: #888; }
+    .email-subject { font-size: 0.92rem; font-weight: 500; margin: 2px 0; }
+    .email-date { font-size: 0.75rem; color: #555; }
+
+    /* News */
+    .news-item { padding: 10px 0; border-bottom: 1px solid #1e1e1e; }
+    .news-item:last-child { border-bottom: none; }
+    .news-item a { color: #a78bfa; text-decoration: none; font-size: 0.9rem; line-height: 1.4; }
+    .news-item a:hover { text-decoration: underline; }
+    .news-src { font-size: 0.72rem; color: #555; margin-top: 3px; }
+
+    /* William status */
+    .wstatus { display: flex; align-items: center; gap: 10px; }
+    .wstatus .name { font-size: 1.1rem; font-weight: 600; }
+    .wstatus .detail { font-size: 0.82rem; color: #888; margin-top: 2px; }
+    .avatar { font-size: 2.2rem; }
+
+    footer { text-align: center; font-size: 0.72rem; color: #444; margin-top: 32px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ðŸŽ© William's Dashboard</h1>
+    <div class="meta"><span class="status-dot"></span><span id="updated">Loading...</span></div>
+  </header>
+
+  <div class="grid">
+    <!-- William Status -->
+    <div class="card">
+      <h2>ðŸ¤– William Status</h2>
+      <div class="wstatus">
+        <div class="avatar">ðŸŽ©</div>
+        <div>
+          <div class="name" id="w-status">Online</div>
+          <div class="detail" id="w-detail">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio Summary -->
+    <div class="card">
+      <h2>ðŸ“Š Portfolio</h2>
+      <div class="stat-row">
+        <div class="stat"><div class="val" id="port-total">â€”</div><div class="lbl">Total (USD)</div></div>
+        <div class="stat"><div class="val" id="port-change" >â€”</div><div class="lbl">24h Change</div></div>
+      </div>
+    </div>
+
+    <!-- Crypto -->
+    <div class="card full">
+      <h2>ðŸ’° Crypto Holdings</h2>
+      <div id="crypto-list"><div style="color:#555;font-size:.85rem">Loading...</div></div>
+    </div>
+
+    <!-- Email -->
+    <div class="card">
+      <h2>ðŸ“¬ Recent Emails</h2>
+      <div id="email-list"><div style="color:#555;font-size:.85rem">Loading...</div></div>
+    </div>
+
+    <!-- News -->
+    <div class="card">
+      <h2>ðŸ“° Headlines</h2>
+      <div id="news-list"><div style="color:#555;font-size:.85rem">Loading...</div></div>
+    </div>
+  </div>
+
+  <footer>Auto-updated by William Â· <span id="footer-time"></span></footer>
+
+  <script>
+    async function load() {
+      try {
+        const r = await fetch('data.json?t=' + Date.now());
+        const d = await r.json();
+
+        document.getElementById('updated').textContent = 'Updated ' + new Date(d.updated).toLocaleString();
+        document.getElementById('footer-time').textContent = new Date(d.updated).toLocaleString();
+
+        // William status
+        document.getElementById('w-status').textContent = d.william?.status || 'Online';
+        document.getElementById('w-detail').textContent = d.william?.detail || '';
+
+        // Portfolio
+        document.getElementById('port-total').textContent = '$' + (d.portfolio?.total || 'â€”');
+        const chg = d.portfolio?.change24h;
+        const chgEl = document.getElementById('port-change');
+        chgEl.textContent = chg ? (chg > 0 ? '+' : '') + chg + '%' : 'â€”';
+        chgEl.className = 'val ' + (chg >= 0 ? 'pos' : 'neg');
+
+        // Crypto
+        const cl = document.getElementById('crypto-list');
+        cl.innerHTML = (d.crypto || []).map(c => `
+          <div class="crypto-item">
+            <div><div class="crypto-name">${c.symbol}</div><div class="crypto-sub">${c.amount} tokens</div></div>
+            <div class="crypto-val">
+              <div class="crypto-usd">$${c.usd}</div>
+              <div class="${c.change >= 0 ? 'pos' : 'neg'}" style="font-size:.78rem">${c.change >= 0 ? '+' : ''}${c.change}%</div>
+            </div>
+          </div>`).join('');
+
+        // Email
+        const el = document.getElementById('email-list');
+        el.innerHTML = (d.emails || []).map(e => `
+          <div class="email-item">
+            <div class="email-from">${e.from}</div>
+            <div class="email-subject">${e.subject}</div>
+            <div class="email-date">${e.date}</div>
+          </div>`).join('');
+
+        // News
+        const nl = document.getElementById('news-list');
+        nl.innerHTML = (d.news || []).map(n => `
+          <div class="news-item">
+            <a href="${n.url}" target="_blank">${n.title}</a>
+            <div class="news-src">${n.source}</div>
+          </div>`).join('');
+
+      } catch(e) {
+        console.error(e);
+      }
+    }
+    load();
+    setInterval(load, 60000);
+  </script>
+</body>
+</html>
