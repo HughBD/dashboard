@@ -1,0 +1,25 @@
+{
+  "updated": "2026-04-02T18:39:00Z",
+  "william": {
+    "status": "Online",
+    "detail": "Active â€” monitoring email, crypto & news"
+  },
+  "portfolio": {
+    "total": "703",
+    "change24h": 2.1
+  },
+  "crypto": [
+    { "symbol": "HYPE", "amount": "12.866", "usd": "474", "change": 19.83 },
+    { "symbol": "ETH", "amount": "0.0469", "usd": "100", "change": 1.12 },
+    { "symbol": "WLFI", "amount": "720.97", "usd": "72", "change": -1.29 },
+    { "symbol": "BTC", "amount": "0.00083", "usd": "57", "change": -2.28 }
+  ],
+  "emails": [
+    { "from": "Alex @ Work", "subject": "Re: Test", "date": "Today 2:25 PM" },
+    { "from": "Alex @ Work", "subject": "Test", "date": "Today 1:31 PM" },
+    { "from": "Pictory", "subject": "Alex, got an IDEA? ðŸ’¡", "date": "Today 1:58 AM" }
+  ],
+  "news": [
+    { "title": "Loading latest headlines...", "source": "William", "url": "#" }
+  ]
+}
