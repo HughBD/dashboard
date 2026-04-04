@@ -143,6 +143,18 @@
     /* ── SPAN HELPERS ── */
     .span-2 { grid-column: span 2; }
 
+    /* ── PROGRESS BAR ── */
+    .progress-section { margin-bottom: 16px; }
+    .progress-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+    .progress-bar { width: 100%; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; border: 1px solid var(--border); }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--green)); transition: width 0.3s ease; }
+    .progress-text { font-size: 0.72rem; color: var(--accent); margin-top: 4px; text-align: right; }
+    .task-list { margin-top: 12px; font-size: 0.78rem; color: var(--muted); }
+    .task-item { padding: 4px 0; display: flex; align-items: center; gap: 6px; }
+    .task-done { color: var(--green); }
+    .task-pending { color: var(--red); }
+    .task-icon { width: 4px; height: 4px; border-radius: 50%; }
+
     /* ── FOOTER ── */
     footer { text-align: center; font-size: 0.65rem; color: #282828; padding: 20px 0 12px; }
 
@@ -260,6 +272,28 @@
         <span class="card-badge">GMAIL</span>
       </div>
       <div class="card-body" id="email-list"></div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="card span-2">
+      <div class="card-header">
+        <span class="card-title">Active Tasks</span>
+        <span class="card-badge">LIVE</span>
+      </div>
+      <div class="card-body">
+        <div class="progress-section">
+          <div class="progress-label">Overall Progress</div>
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 60%"></div></div>
+          <div class="progress-text" id="progress-text">60%</div>
+        </div>
+        <div class="task-list">
+          <div class="task-item task-done"><div class="task-icon" style="background: var(--green)"></div>Script refinement (6/6)</div>
+          <div class="task-item task-done"><div class="task-icon" style="background: var(--green)"></div>Cost optimization (3/3)</div>
+          <div class="task-item task-done"><div class="task-icon" style="background: var(--green)"></div>Context cleanup (4/4)</div>
+          <div class="task-item task-pending"><div class="task-icon" style="background: var(--red)"></div>Script tonal pass (in progress)</div>
+          <div class="task-item task-pending"><div class="task-icon" style="background: var(--red)"></div>Video production setup</div>
+        </div>
+      </div>
     </div>
 
     <!-- NEWS (spans 2 cols) -->

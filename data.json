@@ -1,8 +1,8 @@
 {
-  "updated": "2026-04-02T23:39:00Z",
+  "updated": "2026-04-03T20:43:00Z",
   "william": {
     "status": "Online",
-    "detail": "Active — monitoring email, crypto and news"
+    "detail": "Active — scripts refined, dashboard updated"
   },
   "portfolio": {
     "total": "703",
@@ -15,9 +15,9 @@
     { "symbol": "BTC", "amount": "0.00083", "usd": "57", "change": -2.28 }
   ],
   "emails": [
-    { "from": "Alex @ Work", "subject": "Re: Test", "date": "Today 2:25 PM" },
-    { "from": "Alex @ Work", "subject": "Income ideas?", "date": "Today 1:39 PM" },
-    { "from": "Pictory", "subject": "Alex, got an IDEA?", "date": "Today 1:58 AM" }
+    { "from": "Alex @ Work", "subject": "Script refinement feedback", "date": "Today 1:57 PM" },
+    { "from": "Alex @ Work", "subject": "Dashboard progress request", "date": "Today 4:23 PM" },
+    { "from": "System", "subject": "Daily security audit complete", "date": "Today 9:00 AM" }
   ],
   "news": [
     {
@@ -30,5 +30,20 @@
       "source": "CoinDesk",
       "url": "https://www.coindesk.com/markets/2026/04/02/here-s-why-bitcoin-s-drop-below-usd68-000-puts-it-at-risk-of-a-crash-under-usd60-000"
     }
-  ]
+  ],
+  "progress": {
+    "overall": 60,
+    "tasks": [
+      { "name": "Script refinement (6/6)", "done": true },
+      { "name": "Cost optimization (3/3)", "done": true },
+      { "name": "Context cleanup (4/4)", "done": true },
+      { "name": "Script tonal pass", "done": false },
+      { "name": "Video production setup", "done": false }
+    ]
+  },
+  "weather": {
+    "location": "New Hamburg, ON",
+    "current": "Loading...",
+    "forecast": []
+  }
 }
